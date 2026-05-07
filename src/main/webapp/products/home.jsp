@@ -44,14 +44,14 @@
             if (currentUser == null) {
         %>
                 <!-- Người dùng chưa đăng nhập -->
-                <a href="<%=request.getContextPath()%>/auth?action=signUp">Đăng ký</a>
-                <a href="<%=request.getContextPath()%>/auth?action=signIn">Đăng nhập</a>
+                <a href="<%=request.getContextPath()%>/auth?page=signUp">Đăng ký</a>
+                <a href="<%=request.getContextPath()%>/auth?page=signIn">Đăng nhập</a>
         <%
             } else {
         %>
                 <!-- Người dùng đã đăng nhập -->
-                <a href="">Xin chào, <b><%= currentUser.getUsername() %></b></a>
-                <a href="<%=request.getContextPath()%>/auth?page=change_password">Thay đổi mật khẩu</a>
+                <div class="user-name">Xin chào, <b><%= currentUser.getUsername() %></b></div>
+                <a href="<%=request.getContextPath()%>/auth?page=changePassword">Thay đổi mật khẩu</a>
                 <a href="<%=request.getContextPath()%>/auth?page=logout">Đăng xuất</a>
         <%
             }
@@ -134,12 +134,14 @@
                                         <input type="hidden" name="productId" value="${item.id}">
                                         <input type="hidden" name="action" value="${isFav ? 'remove' : 'add'}">
 
+                                        <c:if test="${not empty sessionScope.currentUser}">
                                         <button type="submit" class="btn btn-outline">
                                             <c:choose>
                                                 <c:when test="${isFav}">💔 Bỏ thích</c:when>
                                                 <c:otherwise>❤️ Yêu thích</c:otherwise>
                                             </c:choose>
                                         </button>
+                                        </c:if>
                                     </form>
 
                                     <!-- MUA HÀNG -->
@@ -150,8 +152,11 @@
                                 </div>
 
                                 <div class="actions">
-                                    <button type="button" class="btn btn-outline" onclick="editBook(${item.id})">Sửa</button>
-                                    <button type="button" class="btn btn-outline" onclick="deleteBook(${item.id})">Xóa</button>
+                                        <%-- Chỉ hiển thị nút Sửa/Xóa nếu là Admin --%>
+                                    <c:if test="${not empty currentUser && currentUser.userRole.id == 1}">
+                                        <button type="button" class="btn btn-outline" onclick="editBook(${item.id})">Sửa</button>
+                                        <button type="button" class="btn btn-outline" onclick="deleteBook(${item.id})">Xóa</button>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>
@@ -187,7 +192,7 @@
     <c:set var="end" value="${currentPage + 2 < totalPages ? currentPage + 2 : totalPages}" />
 
     <c:forEach begin="${start}" end="${end}" var="i">
-        <a href="book?page=${i}&search=${param.search}
+        <a href="products?page=${i}&search=${param.search}
             <c:forEach var='b' items='${paramValues.brand}'>
                 &brand=${b}
             </c:forEach>
@@ -206,7 +211,7 @@
             <span class="page-link disabled">Trang sau</span>
         </c:when>
         <c:otherwise>
-            <a href="book?page=${currentPage + 1}&search=${param.search}
+            <a href="products?page=${currentPage + 1}&search=${param.search}
                 <c:forEach var='b' items='${paramValues.brand}'>
                     &brand=${b}
                 </c:forEach>
@@ -249,11 +254,11 @@
         box.style.display = box.style.display === 'block' ? 'none' : 'block';
     }
     function editBook(id){
-        window.location.href='book?action=edit&id=' + id;
+        window.location.href='products?action=edit&id=' + id;
     }
     function deleteBook(id){
         if(confirm('Bạn có chắc muốn xóa sản phẩm này?')){
-            window.location.href='book?action=delete&id=' + id;
+            window.location.href='products?action=delete&id=' + id;
         }
     }
 </script>

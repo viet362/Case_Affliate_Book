@@ -36,7 +36,7 @@ public class UserController extends HttpServlet {
             case "favorite":
                 showFavoriteProduct(req, resp);
                 break;
-            case "change_password":
+            case "changePassword":
                 showChangePasswordPage(req, resp);
                 break;
             default:
@@ -131,7 +131,7 @@ public class UserController extends HttpServlet {
         User foundUser = userService.signIn(username, password);
         String errorMessage = null;
         if (foundUser == null) {
-            errorMessage = "Wrong username or password";
+            errorMessage = "Sai tên đăng nhập hoặc mật khẩu";
             RequestDispatcher dispatcher = req.getRequestDispatcher("users/signIn.jsp");
             req.setAttribute("errorMessage", errorMessage);
             dispatcher.forward(req, resp);
@@ -149,7 +149,6 @@ public class UserController extends HttpServlet {
         String newPassword = req.getParameter("newPassword");
 
         boolean success = userService.changePassword(currentUser.getId(), oldPassword, newPassword);
-
         if (success) {
             req.setAttribute("message", "Đổi mật khẩu thành công!");
         } else {

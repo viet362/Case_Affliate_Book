@@ -55,38 +55,96 @@ body {
     cursor: pointer;
 }
 /* User icon */
-.user-wrapper {
+/* Container chứa icon và popup */
+.right {
     position: relative;
+    display: inline-block;
 }
 
-.user-wrapper i {
+/* Icon người dùng */
+#userIcon {
     font-size: 28px;
     cursor: pointer;
-    color: #333;
+    color: white; /* Màu icon trên header */
+    transition: opacity 0.2s;
 }
 
-/* Popup menu nhỏ */
-.user-popup span {
+#userIcon:hover {
+    opacity: 0.8;
+}
+
+/* Khung Popup */
+.user-popup {
+    /* JS của bạn đang dùng "block" nên CSS mặc định phải là none */
     display: none;
+
     position: absolute;
-    top: 45px;
+    top: 100%; /* Đẩy xuống ngay dưới icon */
     right: 0;
-    width: 160px;
-    background: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 1000;
+    margin-top: 10px; /* Khoảng cách nhỏ với icon */
+
+    width: 200px;
+    background-color: #ffffff;
+    border-radius: 8px;
+
+    /* Đổ bóng để nổi bật trên nền web */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+
+    overflow: hidden;
+    z-index: 9999;
 }
 
-.user-popup a span {
+/* Phần "Xin chào, client" */
+.user-name {
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #333333; /* Màu xám đậm */
+    background-color: #f8f9fa; /* Nền xám cực nhẹ */
+    border-bottom: 1px solid #eeeeee;
+    font-weight: 500;
+    cursor: default;
+}
+
+.user-name b {
+    color: #000000;
+    font-weight: 700;
+}
+
+/* Các đường link trong popup (Đăng xuất, Đổi MK) */
+.user-popup a {
     display: block;
-    padding: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
     text-decoration: none;
-    color: #333;
+    text-align: left;
+    transition: all 0.2s;
+
+    /* QUAN TRỌNG: Ép màu chữ cố định để không bị biến thành màu tím */
+    color: #444444 !important;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.user-popup a:hover span:hover {
-    background-color: #f0f0f0;
+/* Xử lý trạng thái đã click (visited) để không bị tím */
+.user-popup a:visited {
+    color: #444444 !important;
+}
+
+/* Hiệu ứng khi di chuột vào link */
+.user-popup a:hover {
+    background-color: #f1f5f9;
+    color: #007bff !important; /* Chữ chuyển xanh khi hover */
+}
+
+/* Xóa gạch kẻ ở item cuối cùng */
+.user-popup a:last-child {
+    border-bottom: none;
+}
+
+/* username */
+.user-name{
+    font-weight: bold;
+    background: #fafafa;
 }
 
 /* Responsive */

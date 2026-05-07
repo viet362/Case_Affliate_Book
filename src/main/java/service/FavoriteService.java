@@ -22,7 +22,7 @@ public class FavoriteService {
             statement.setInt(2, productId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            // nếu bị duplicate (do UNIQUE) thì bỏ qua
+            e.printStackTrace();
             return false;
         }
     }

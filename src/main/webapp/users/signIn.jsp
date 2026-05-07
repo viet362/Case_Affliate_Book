@@ -10,20 +10,49 @@
 <html>
 <head>
     <title>Đăng nhập</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<center>
-  <h1>Sign In</h1>
-  <form method="POST" action="/auth?action=signIn">
-    <input type="text" name="username" placeholder="Username">
-    <input type="text" name="password" placeholder="Password">
-    <button>Submit</button>
-  </form>
-  <c:if test="${errorMessage != null}">
-    <span style="color: red">${errorMessage}</span>
-    <br>
-  </c:if>
-  <a href="/auth?page=signUp">You haven't accounted? Sign up.</a>
-</center>
+
+<body class="bg-light">
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow p-4" style="width: 350px;">
+
+    <h3 class="text-center mb-4">Đăng nhập</h3>
+
+    <form method="POST" action="/auth?action=signIn">
+      <div class="mb-3">
+        <label class="form-label">Tên đăng nhập</label>
+        <input type="text" class="form-control" name="username" placeholder="Username">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Mật khẩu</label>
+        <input type="password" class="form-control" name="password" placeholder="Password">
+      </div>
+
+      <button class="btn btn-primary w-100">Xác nhận</button>
+    </form>
+
+    <center>
+    <c:if test="${errorMessage != null}">
+      <span style="color: red">${errorMessage}</span>
+      <br>
+    </c:if>
+    </center>
+
+    <a href="/products?page=home">
+    <button class="btn btn-secondary w-100 mt-3">
+      Tiếp tục với tư cách khách
+    </button>
+    </a>
+
+    <div class="text-center mt-3">
+      <a href="auth?page=signUp">Chưa có tài khoản? Đăng ký.</a>
+    </div>
+
+  </div>
+</div>
+
 </body>
 </html>

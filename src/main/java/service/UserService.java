@@ -1,6 +1,7 @@
 package service;
 
 import entity.User;
+import entity.UserRole;
 import lib.MySQLConnection;
 
 import java.sql.Connection;
@@ -26,7 +27,13 @@ public class UserService {
             boolean isFoundUser = resultSet.next();
             if(isFoundUser) {
                 int id = resultSet.getInt("id");
+                int roleID = resultSet.getInt("roleID");
                 foundUser = new User(id, username);
+
+                UserRole role = new UserRole();
+                role.setId(roleID);
+
+                foundUser.setUserRole(role);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -78,6 +85,10 @@ public class UserService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean isAdmin(User user) {
+        return user != null && user.getUserRole().getId() == 1;
     }
 
 }

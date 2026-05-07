@@ -44,14 +44,14 @@
                 if (currentUser == null) {
             %>
             <!-- Người dùng chưa đăng nhập -->
-            <a href="<%=request.getContextPath()%>/auth?action=signUp">Đăng ký</a>
-            <a href="<%=request.getContextPath()%>/auth?action=signIn">Đăng nhập</a>
+            <a href="<%=request.getContextPath()%>/auth?page=signUp">Đăng ký</a>
+            <a href="<%=request.getContextPath()%>/auth?page=signIn">Đăng nhập</a>
             <%
             } else {
             %>
             <!-- Người dùng đã đăng nhập -->
             <a href="">Xin chào, <b><%= currentUser.getUsername() %></b></a>
-            <a href="<%=request.getContextPath()%>/auth?page=change_password">Thay đổi mật khẩu</a>
+            <a href="<%=request.getContextPath()%>/auth?page=changePassword">Thay đổi mật khẩu</a>
             <a href="<%=request.getContextPath()%>/auth?page=logout">Đăng xuất</a>
             <%
                 }
@@ -173,7 +173,7 @@
             <c:set var="end" value="${currentPage + 2 < totalPages ? currentPage + 2 : totalPages}" />
 
             <c:forEach begin="${start}" end="${end}" var="i">
-                <a href="book?page=${i}&search=${param.search}
+                <a href="products?page=${i}&search=${param.search}
             <c:forEach var='b' items='${paramValues.brand}'>
                 &brand=${b}
             </c:forEach>
@@ -192,7 +192,7 @@
                     <span class="page-link disabled">Trang sau</span>
                 </c:when>
                 <c:otherwise>
-                    <a href="book?page=${currentPage + 1}&search=${param.search}
+                    <a href="products?page=${currentPage + 1}&search=${param.search}
                 <c:forEach var='b' items='${paramValues.brand}'>
                     &brand=${b}
                 </c:forEach>
