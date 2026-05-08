@@ -1,0 +1,175 @@
+/* --- Tối ưu hóa Container tổng --- */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Fieldset và Legend --- */
+fieldset {
+    border: 1px solid #edf2f7;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+legend {
+    font-weight: bold;
+    color: #4a5568;
+    padding: 0 15px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Layout Flexbox chính --- */
+.book-detail-container {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các thành phần xuống hàng khi thiếu diện tích */
+    gap: 40px;
+}
+
+/* --- Khối Ảnh bên trái --- */
+.img-container {
+    flex: 0 0 320px; /* Cố định độ rộng cột ảnh, không cho co dãn quá mức */
+    max-width: 100%;
+}
+
+.img-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    object-fit: contain; /* Giữ nguyên tỉ lệ ảnh, chống vỡ/méo */
+    background: #f8f9fa;
+}
+
+/* --- Khối Thông tin bên phải --- */
+.details {
+    flex: 1; /* Chiếm phần không gian còn lại */
+    min-width: 300px;
+}
+
+.details h2 {
+    font-size: 2.2rem;
+    color: #2d3748;
+    margin: 0 0 15px 0;
+    line-height: 1.2;
+}
+
+.details p b {
+    color: #2b6cb0; /* Làm nổi bật tên Nhà xuất bản */
+}
+
+.price {
+    font-size: 2rem;
+    color: #e53e3e;
+    font-weight: 800;
+    margin: 20px 0;
+    display: block;
+}
+
+/* --- Các nút bấm (Actions) --- */
+.actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+/* Nút Mua ngay */
+.btn[style*="background: #28a745"] {
+    background-color: #38a169 !important;
+    color: white;
+    box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+}
+
+.btn[style*="background: #28a745"]:hover {
+    background-color: #2f855a !important;
+    transform: translateY(-2px);
+}
+
+/* Nút Yêu thích (btn-outline) */
+.btn-outline {
+    background: transparent;
+    border: 2px solid #e2e8f0;
+    color: #4a5568;
+}
+
+.btn-outline:hover {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+}
+
+/* --- Khối Quản trị (Admin) --- */
+.admin-actions {
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+/* --- Khối Tóm tắt nội dung (Ép xuống hàng) --- */
+.summary-box {
+    flex: 0 0 100%; /* Cực kỳ quan trọng: Ép div này chiếm 100% chiều rộng để xuống hàng */
+    margin-top: 40px !important;
+    padding-top: 25px;
+    border-top: 1px solid #edf2f7;
+}
+
+.summary-box h4 {
+    font-size: 1.4rem;
+    color: #2d3748;
+    margin-bottom: 15px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.summary-box h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: #38a169; /* Thanh gạch chân trang trí */
+}
+
+/* Văn bản tóm tắt */
+.summary-box {
+    line-height: 1.8 !important;
+    color: #4a5568 !important;
+    text-align: justify; /* Căn lề 2 bên cho đẹp như trang sách */
+    font-size: 1.05rem;
+}
+
+/* Resposive cho Mobile */
+@media (max-width: 768px) {
+    .book-detail-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .img-container {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 300px;
+    }
+    .details {
+        text-align: center;
+    }
+    .actions {
+        justify-content: center;
+    }
+}

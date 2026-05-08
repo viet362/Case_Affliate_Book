@@ -1,6 +1,7 @@
 package controller;
 
 import entity.Brand;
+import entity.Category;
 import entity.Product;
 import entity.User;
 import jakarta.servlet.RequestDispatcher;
@@ -15,6 +16,7 @@ import service.CategoryService;
 import service.ProductService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,10 +32,10 @@ public class ProductController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        String action = req.getParameter("action");
-        if (action == null) action = "home";
+        String page = req.getParameter("page");
+        if (page == null) page = "home";
 
-        switch (action) {
+        switch (page) {
             case "home":
                 showHomePage(req, resp);
                 break;
@@ -72,7 +74,7 @@ public class ProductController extends HttpServlet {
                 break;
 
             case "edit":
-                updateProduct(req, resp);
+                editProduct(req, resp);
                 break;
 
             default:
@@ -141,15 +143,34 @@ public class ProductController extends HttpServlet {
 
     private void showDetailPage(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(req.getParameter("id"));
+            Product product = productService.getById(id);
 
-        int id = Integer.parseInt(req.getParameter("id"));
+            if (product == null) {
+                resp.sendRedirect("products?page=home");
+                return;
+            }
 
-        Product product = productService.getById(id);
+            req.setAttribute("product", product);
 
-        req.setAttribute("product", product);
+            HttpSession session = req.getSession(false);
+            if (session != null) {
+                User user = (User) session.getAttribute("currentUser");
+                if (user != null) {
+                    List<Product> favorites = productService.getFavoriteByUser(user.getId());
+                    Set<Integer> favoriteIds = new HashSet<>();
+                    for (Product p : favorites) {
+                        favoriteIds.add(p.getId());
+                    }
+                    req.setAttribute("favoriteIds", favoriteIds);
+                }
+            }
 
-        req.getRequestDispatcher("products/detail.jsp")
-                .forward(req, resp);
+            req.getRequestDispatcher("products/detail.jsp").forward(req, resp);
+        } catch (NumberFormatException e) {
+            resp.sendRedirect("products?page=home");
+        }
     }
 
     private void deleteProduct(HttpServletRequest req,
@@ -227,7 +248,7 @@ public class ProductController extends HttpServlet {
         resp.sendRedirect("/products?action=home");
     }
 
-    private void updateProduct(HttpServletRequest req,
+    private void editProduct(HttpServletRequest req,
                                HttpServletResponse resp)
             throws IOException {
 
@@ -240,8 +261,15 @@ public class ProductController extends HttpServlet {
         String alink = req.getParameter("alink");
 
         int brandId = Integer.parseInt(req.getParameter("brandId"));
-
         Brand brand = new Brand(brandId);
+
+        String[] categoryIds = req.getParameterValues("categoryIds");
+        List<Category> categories = new ArrayList<>();
+        if (categoryIds != null) {
+            for (String cId : categoryIds) {
+                categories.add(new Category(Integer.parseInt(cId)));
+            }
+        }
 
         Product product = new Product(
                 id,
@@ -252,6 +280,7 @@ public class ProductController extends HttpServlet {
                 summary,
                 alink
         );
+        product.setCategories(categories);
 
         productService.update(id, product);
 

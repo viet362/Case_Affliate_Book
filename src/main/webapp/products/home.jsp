@@ -112,7 +112,7 @@
             <legend>Danh sách sản phẩm</legend>
             <div class="book-grid">
                 <c:forEach var="item" items="${products}">
-                    <div class="book-card">
+                    <div class="book-card" style="position: relative; cursor: pointer;" onclick="if(!(event.target.closest('button') || event.target.closest('form'))) { window.location.href='/products?page=detail&id=${item.id}'; }">
                         <div class="img-container">
                             <img src="${item.image}" alt="${item.name}">
                         </div>
@@ -144,18 +144,13 @@
                                         </c:if>
                                     </form>
 
-                                    <!-- MUA HÀNG -->
-                                    <button type="button" class="btn btn-outline"
-                                            onclick="window.location.href='${item.alink}'">
-                                        Mua hàng
-                                    </button>
                                 </div>
 
                                 <div class="actions">
                                         <%-- Chỉ hiển thị nút Sửa/Xóa nếu là Admin --%>
                                     <c:if test="${not empty currentUser && currentUser.userRole.id == 1}">
-                                        <button type="button" class="btn btn-outline" onclick="editBook(${item.id})">Sửa</button>
-                                        <button type="button" class="btn btn-outline" onclick="deleteBook(${item.id})">Xóa</button>
+                                        <a href="/products?page=edit&id=${item.id}"><button type="button" class="btn btn-outline">CẬP NHẬT</button></a>
+                                        <a href="/products?page=delete&id=${item.id}"><button type="button" class="btn btn-outline">XÓA</button></a>
                                     </c:if>
                                 </div>
                             </div>
