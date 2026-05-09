@@ -1,6 +1,8 @@
 package service;
 
 import entity.Brand;
+import entity.Category;
+import entity.Product;
 import lib.MySQLConnection;
 
 import java.sql.Connection;
@@ -86,5 +88,27 @@ public class BrandService implements IService<Brand>{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Brand> getByNameContains(String keyword) {
+        if(keyword == null) keyword = "";
+        keyword = "%" + keyword + "%";
+        System.out.println(keyword);
+        String sql = "select * from brand where brand.name like ?";
+        List<Brand> list = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, keyword);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                Brand brand = new Brand(id, name);
+                list.add(brand);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
     }
 }

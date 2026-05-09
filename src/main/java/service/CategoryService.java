@@ -87,4 +87,26 @@ public class CategoryService implements IService<Category>{
             throw new RuntimeException(e);
         }
     }
+
+    public List<Category> getByNameContains(String keyword) {
+        if(keyword == null) keyword = "";
+        keyword = "%" + keyword + "%";
+        System.out.println(keyword);
+        String sql = "select * from category where category.name like ?";
+        List<Category> list = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, keyword);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                Category category = new Category(id, name);
+                list.add(category);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
 }

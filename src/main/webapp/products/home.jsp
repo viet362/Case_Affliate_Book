@@ -100,12 +100,15 @@
     </div>
 
     <main class="main">
-        <fieldset>
+        <fieldset style="display:flex; gap:10px; align-items:center; margin-bottom: 20px; flex-wrap: nowrap; justify-content: flex-start;">
             <legend>Tìm kiếm</legend>
-            <form action="products" method="get" style="display:flex;gap:10px;">
+            <form action="products" method="get" style="display:flex;gap:10px; flex: 0 1 700px; max-width: 100%;">
                 <input type="text" name="search" value="${param.search}" placeholder="Nhập tên sách..." style="flex:1;padding:8px;">
                 <button type="submit" class="btn">Tìm</button>
             </form>
+            <c:if test="${not empty currentUser && currentUser.userRole.id == 1}">
+                <a href="products?page=add" class="btn" type="button">Thêm sản phẩm</a>
+            </c:if>
         </fieldset>
 
         <fieldset>
@@ -119,7 +122,14 @@
 
                         <div class="details">
                             <div>
-                                <div style="font-weight:bold;font-size:1rem;">${item.name}</div>
+                                <div style="font-weight:bold; font-size:1rem;
+                                            display: -webkit-box;
+                                            -webkit-line-clamp: 2;
+                                            -webkit-box-orient: vertical;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            height: 2.4rem;
+                                            line-height: 1.2rem;">${item.name}</div>
                                 <div style="color:#777;">${item.brand.name}</div>
                             </div>
 

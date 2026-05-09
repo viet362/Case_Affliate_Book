@@ -220,10 +220,7 @@ public class ProductController extends HttpServlet {
                 .forward(req, resp);
     }
 
-    private void addProduct(HttpServletRequest req,
-                            HttpServletResponse resp)
-            throws IOException {
-
+    private void addProduct(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name = req.getParameter("name");
         double price = Double.parseDouble(req.getParameter("price"));
         String image = req.getParameter("image");
@@ -231,8 +228,15 @@ public class ProductController extends HttpServlet {
         String alink = req.getParameter("alink");
 
         int brandId = Integer.parseInt(req.getParameter("brandId"));
-
         Brand brand = new Brand(brandId);
+
+        String[] categoryIds = req.getParameterValues("categoryIds");
+        List<Category> categories = new ArrayList<>();
+        if (categoryIds != null) {
+            for (String cId : categoryIds) {
+                categories.add(new Category(Integer.parseInt(cId)));
+            }
+        }
 
         Product product = new Product(
                 name,
@@ -243,14 +247,14 @@ public class ProductController extends HttpServlet {
                 alink
         );
 
+        product.setCategories(categories);
+
         productService.add(product);
 
         resp.sendRedirect("/products?action=home");
     }
 
-    private void editProduct(HttpServletRequest req,
-                               HttpServletResponse resp)
-            throws IOException {
+    private void editProduct(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         int id = Integer.parseInt(req.getParameter("id"));
 

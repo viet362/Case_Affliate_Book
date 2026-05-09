@@ -119,7 +119,14 @@
 
                         <div class="details">
                             <div>
-                                <div style="font-weight:bold;font-size:1rem;">${item.name}</div>
+                                <div style="font-weight:bold; font-size:1rem;
+                                            display: -webkit-box;
+                                            -webkit-line-clamp: 2;
+                                            -webkit-box-orient: vertical;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            height: 2.4rem;
+                                            line-height: 1.2rem;">${item.name}</div>
                                 <div style="color:#777;">${item.brand.name}</div>
                             </div>
 
