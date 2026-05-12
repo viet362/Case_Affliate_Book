@@ -57,7 +57,12 @@ public class ProductController extends HttpServlet {
                 break;
 
             default:
-                showNotFound(req, resp);
+                try {
+                    Integer.parseInt(page);
+                    showHomePage(req, resp); // Nếu là số (1, 2, 3...), chạy hàm này
+                } catch (NumberFormatException e) {
+                    showNotFound(req, resp);
+                }
         }
     }
 
