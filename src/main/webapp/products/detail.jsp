@@ -88,7 +88,7 @@
                             <input type="hidden" name="action" value="${isFav ? 'remove' : 'add'}">
 
                             <c:if test="${not empty sessionScope.currentUser}">
-                                <button type="submit" class="btn btn-outline">
+                                <button type="submit" class="btn btn-outline" style="${isFav ? 'color: gray; border-color: gray;' : ''}">
                                         ${isFav ? '💔 Bỏ thích' : '❤️ Yêu thích'}
                                 </button>
                             </c:if>

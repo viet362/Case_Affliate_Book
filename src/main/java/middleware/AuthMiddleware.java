@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Set;
 
 @WebFilter("*")
 public class AuthMiddleware extends HttpFilter {
@@ -35,17 +37,20 @@ public class AuthMiddleware extends HttpFilter {
             return;
         }
 
-        // 2. Kiểm tra trang Account List (Chỉ dành cho Admin)
-        // Giả sử URL của bạn là /admin?page=accountlist hoặc /accountlist
-        boolean isAdminPage = "accountlist".equals(pageParam);
+        // 2. Kiểm tra trang chỉ dành cho Admin
+        String servletPath = request.getServletPath();
+        String adminPageParam = request.getParameter("page");
+
+        boolean isAdminPage = "/products".equals(servletPath) && Arrays.asList("add", "edit", "delete").contains(adminPageParam);
 
         if (isAdminPage) {
-            if (user == null || user.getUserRole().getId() != 1) {
-                // Chuyển hướng về trang báo lỗi 403 hoặc thông báo không có quyền
-                response.sendRedirect(request.getContextPath() + "/errors/not-found.jsp");
+            boolean isNotAdmin = user == null || user.getUserRole().getId() != 1;
+            if (isNotAdmin) {
+                response.sendRedirect(request.getContextPath() + "errors/not-found.jsp");
                 return;
             }
         }
+
         chain.doFilter(req, res);
     }
 }

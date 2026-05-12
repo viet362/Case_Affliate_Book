@@ -66,7 +66,7 @@
                         </div>
 
                         <div class="edit-form-group">
-                            <label>Nhà xuất bản:</label>
+                            <label>Nhà xuất bản(Cập nhật <a href="brands?page=home&productId=${product.id}">tại đây</a>):</label>
                             <select name="brandId">
                                 <c:forEach var="b" items="${brands}">
                                     <option value="${b.id}" ${b.id == product.brand.id ? 'selected' : ''}>
@@ -87,7 +87,7 @@
                         </div>
 
                         <div class="edit-form-group">
-                            <label>Thể loại:</label>
+                            <label>Thể loại (Cập nhật <a href="categories?page=home&productId=${product.id}">tại đây</a>):</label>
                             <div class="category-checkbox-list">
                                 <c:forEach var="item" items="${categories}">
                                     <label style="font-weight: normal;">

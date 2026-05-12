@@ -22,8 +22,8 @@
             </a>
         </c:when>
         <c:otherwise>
-            <!-- Nếu vào trực tiếp từ menu, quay lại trang danh sách sản phẩm chung -->
-            <a href="products?action=home" class="btn-back" title="Quay lại">
+            <!-- Nếu vào trực tiếp từ add quay lại add -->
+            <a href="products?page=add" class="btn-back" title="Quay lại">
                 &#10229;
             </a>
         </c:otherwise>
