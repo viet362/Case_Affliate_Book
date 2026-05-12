@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import service.BrandService;
 import service.CategoryService;
+import service.ProductCategoryService;
 import service.ProductService;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class ProductController extends HttpServlet {
     private final ProductService productService = new ProductService();
     private final BrandService brandService = new BrandService();
     private final CategoryService categoryService = new CategoryService();
+    private final ProductCategoryService pcService = new ProductCategoryService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -209,20 +211,23 @@ public class ProductController extends HttpServlet {
                 .forward(req, resp);
     }
 
-    private void showEditPage(HttpServletRequest req,
-                              HttpServletResponse resp)
-            throws ServletException, IOException {
+    private void showEditPage(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
 
         int id = Integer.parseInt(req.getParameter("id"));
-
         Product product = productService.getById(id);
+
+        if (product != null) {
+
+            List<Category> selectedCategories = pcService.getByProductId(id);
+
+            product.setCategories(selectedCategories);
+        }
 
         req.setAttribute("product", product);
         req.setAttribute("brands", brandService.getAll());
         req.setAttribute("categories", categoryService.getAll());
 
-        req.getRequestDispatcher("products/edit.jsp")
-                .forward(req, resp);
+        req.getRequestDispatcher("products/edit.jsp").forward(req, resp);
     }
 
     private void addProduct(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -255,6 +260,12 @@ public class ProductController extends HttpServlet {
         product.setCategories(categories);
 
         productService.add(product);
+        int newProductId = product.getId();
+
+        // Lưu vào bảng trung gian product_category
+        if (newProductId > 0 && categories != null && !categories.isEmpty()) {
+            pcService.update(newProductId, categories);
+        }
 
         resp.sendRedirect("/products?action=home");
     }

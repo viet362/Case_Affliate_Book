@@ -16,14 +16,13 @@ public class ProductService implements IService<Product> {
     public ProductService() {
         connection = MySQLConnection.getConnection();
     }
-    public final BrandService brandService = new BrandService();
+    public final ProductCategoryService pcService = new ProductCategoryService();
 
     @Override
-    public void add(Product product) {
+    public void add(Product product) { // Hoặc sửa thành public int add nếu IService cho phép
         String sql = "INSERT INTO product(name, price, brandID, image, summary, alink) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
+        try (PreparedStatement statement = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
@@ -31,7 +30,18 @@ public class ProductService implements IService<Product> {
             statement.setString(4, product.getImage());
             statement.setString(5, product.getSummary());
             statement.setString(6, product.getAlink());
-            statement.executeUpdate();
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                // Lấy ID tự sinh từ database
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        // Gán ID mới vào object product để Controller có thể lấy ra
+                        product.setId(generatedKeys.getInt(1));
+                    }
+                }
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -98,24 +108,21 @@ public class ProductService implements IService<Product> {
 
     @Override
     public void update(int id, Product product) {
-        String sql = """
-                UPDATE product
-                SET name = ?, price = ?, brandID = ?, image = ?, summary = ?, alink = ?
-                WHERE id = ?
-                """;
-
+        String sql = "UPDATE product SET name=?, price=?, brandID=?, image=?, summary=?, alink=? WHERE id=?";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            statement.setString(1, product.getName());
-            statement.setDouble(2, product.getPrice());
-            statement.setInt(3, product.getBrand().getId());
-            statement.setString(4, product.getImage());
-            statement.setString(5, product.getSummary());
-            statement.setString(6, product.getAlink());
-            statement.setInt(7, id);
-
-            statement.executeUpdate();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, product.getName());
+            ps.setDouble(2, product.getPrice());
+            ps.setInt(3, product.getBrand().getId());
+            ps.setString(4, product.getImage());
+            ps.setString(5, product.getSummary());
+            ps.setString(6, product.getAlink());
+            ps.setInt(7, id);
+            ps.executeUpdate();
+            // Cập nhật bảng trung gian: Xóa cũ - Thêm mới
+            if (product.getCategories() != null) {
+                pcService.update(id, product.getCategories());
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

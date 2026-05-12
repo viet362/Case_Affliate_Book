@@ -44,7 +44,7 @@ public class ProductCategoryService {
     public List<Category> getByProductId(int productId) {
         List<Category> list = new ArrayList<>();
 
-        String sql = "SELECT c.* FROM category c JOIN product_category pc" +
+        String sql = "SELECT c.* FROM category c JOIN product_category pc " +
                      "ON c.id = pc.categoryID WHERE pc.productID = ?";
 
         try {
